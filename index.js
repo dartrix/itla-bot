@@ -28,7 +28,7 @@ const config = require("./config.json");
 
     console.log("Entrando pagina del itla...")
     // networkidle2 para esperar que cargue todo por completo
-    await page.goto("https://itla.edu.do/virtual/login/index.php", {
+    await page.goto("https://itla.edu.do/virtual/cv/", {
       waitUntil: 'networkidle2'
     });
 
@@ -40,7 +40,7 @@ const config = require("./config.json");
 
     // btn de clickear
     console.log("Logeando...")
-    await page.click("#loginbtn");
+    await page.click(".sign-up-btn > button");
 
     // Ningun wait me quiso funcionar asi que gg wp _aiuda_
     console.log("Esperando 3 segundos por bugs del itla ")
@@ -58,18 +58,17 @@ const config = require("./config.json");
     });
 
     // esperar que carguen todos los cursos 
-    await page.waitForSelector(".coursebox-content");
+    await page.waitForSelector(".dashboard-card");
 
     // solo se necesitan los href 
     console.log("Obteniendo links de materias...");
-    let links = await page.$$eval(".coursebox-content a", lins => lins.map(a => a.href));
+    let links = await page.$$eval(".dashboard-card a", lins => lins.map(a => a.href));
 
-    links.forEach(element => {
-      if (!(element.match(/user/) == null)) {
-        var index = links.indexOf(element);
-        links.splice(index, 1)
-      }
-    });
+    
+    //ez regex
+    links = links.filter(a => !a.match(/my/gi))
+    links = links.filter((a,pos) => links.indexOf(a)==pos);
+    console.log(links)
     return links;
   }
 
@@ -85,7 +84,7 @@ const config = require("./config.json");
       });
 
       // Obtener el nombre de la asignatura ez
-      let nombreAsig = await page.$eval('#sitetitle', s => s.innerHTML)
+      let nombreAsig = await page.$eval('.page-header-headings > h1', s => s.innerHTML)
       console.log("[" + nombreAsig + "] Listo!");
 
       // xd
