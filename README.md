@@ -22,5 +22,3 @@ Este bot se creo con el proposito de aprender [Puppeteer](https://pptr.dev/), qu
 ## Bugs y demas
 
 ---
-
- D. Ramos
